@@ -31,7 +31,8 @@ Supported config as follows.
 Features and Capacity, All PAN-OS Releases
 https://loop.paloaltonetworks.com/docs/DOC-3950
 
-
+<pre>
 $ ./pan.sh -h
 $ ./pan.sh -f conf/pan-245.conf
 $ ./clean.sh
+</pre>
