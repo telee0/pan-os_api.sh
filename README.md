@@ -33,6 +33,13 @@ https://loop.paloaltonetworks.com/docs/DOC-3950
 
 <pre>
 $ ./pan.sh -h
+
+Usage: ./pan.sh [-h] [-c] [-f] param_file
+ 
+ c: clean
+ f: use config from param_file
+ h: help
+
 $ ./pan.sh -f conf/pan-245.conf 
 
 param_file = conf/pan-245.conf
