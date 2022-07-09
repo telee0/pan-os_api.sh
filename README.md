@@ -74,7 +74,8 @@ Config scripts and data are saved under the job directory 8666
 Please run 8666/config.sh or individual 8666/*.sh in proper order. (e.g. zones before interfaces)
 
 $ cd 8666/
-$ sh pan_dg.sh 
+$ sh pan_dg.sh
+$ sh pan_dg-clean.sh
 $ cd ..
 $ ./clean.sh
 </pre>
