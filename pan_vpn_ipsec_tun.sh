@@ -183,21 +183,25 @@ EOF
 			break 1
 		fi
 
+		ipsec_name=`printf "$IPSEC_NAME" $i`
+		ipsec_ike_gateway=`printf "$IPSEC_IKE_GATEWAY" $i`
+
 		proxy_id_A=""
 		proxy_id_B=""
 
-		for ((j = 1; j <= $IPSEC_PROXY_ID_LIMIT; j++)); do
-			if [ $ipsec -gt $N_NET_IPSEC ]; then
-				break 1
-			fi
+		if [ "$IPSEC_PROXY_ID_ADD" = "yes" ]; then
+			for ((j = 1; j <= $IPSEC_PROXY_ID_LIMIT; j++)); do
+				if [ $ipsec -gt $N_NET_IPSEC ]; then
+					break 1
+				fi
 
-			proxy_id_name=`printf "$IPSEC_PROXY_ID_NAME" $i $j`
+				proxy_id_name=`printf "$IPSEC_PROXY_ID_NAME" $i $j`
 
-			local=`printf "$IPSEC_PROXY_ID_LOCAL" $i $j`
-			remote=`printf "$IPSEC_PROXY_ID_REMOTE" $i $j`
-			protocol="$IPSEC_PROXY_ID_PROTOCOL"
+				local=`printf "$IPSEC_IP_LOCAL" $i $j`
+				remote=`printf "$IPSEC_IP_REMOTE" $i $j`
+				protocol="$IPSEC_PROXY_ID_PROTOCOL"
 
-			proxy_id_A+="
+				proxy_id_A+="
                   <entry name='$proxy_id_name'>
                     <protocol>
                       <$protocol/>
@@ -206,7 +210,7 @@ EOF
                     <remote>$remote</remote>
                   </entry>"
 
-			proxy_id_B+="
+				proxy_id_B+="
                   <entry name='$proxy_id_name'>
                     <protocol>
                       <$protocol/>
@@ -215,15 +219,16 @@ EOF
                     <remote>$local</remote>
                   </entry>"
 
-			if ! ((ipsec % 100)); then
-				echo -n '.'
-			fi
+				if ! ((ipsec % 100)); then
+					echo -n '.'
+				fi
 
-			((ipsec+=1))
-		done
+				((ipsec+=1))
+			done
 
-		ipsec_name=`printf "$IPSEC_NAME" $i`
-		ipsec_ike_gateway=`printf "$IPSEC_IKE_GATEWAY" $i`
+			proxy_id_A="<proxy-id>$proxy_id_A</proxy-id>"
+			proxy_id_B="<proxy-id>$proxy_id_B</proxy-id>"
+		fi
 
 		element_A="
             <entry name='$ipsec_name'>
@@ -231,9 +236,7 @@ EOF
                 <ike-gateway>
                   <entry name='$ipsec_ike_gateway'/>
                 </ike-gateway>
-                <proxy-id>
-                  $proxy_id_A
-                </proxy-id>
+                $proxy_id_A
               </auto-key>
               <tunnel-monitor>
                 <enable>no</enable>
@@ -248,9 +251,7 @@ EOF
                 <ike-gateway>
                   <entry name='$ipsec_ike_gateway'/>
                 </ike-gateway>
-                <proxy-id>
-                  $proxy_id_B
-                </proxy-id>
+                $proxy_id_B
               </auto-key>
               <tunnel-monitor>
                 <enable>no</enable>
@@ -274,8 +275,8 @@ EOF
 
 		route_name="Tunnel_Route-$i"
 
-		destination_A=`printf "$IPSEC_PROXY_ID_REMOTE/24" $i 0`
-		destination_B=`printf "$IPSEC_PROXY_ID_LOCAL/24"  $i 0`
+		destination_A=`printf "$IPSEC_IP_REMOTE$IPSEC_IP_REMOTE_PREFIX" $i 0`
+		destination_B=`printf "$IPSEC_IP_LOCAL$IPSEC_IP_LOCAL_PREFIX" $i 0`
 
 		routes_A+="
 		          <entry name='$route_name'>
