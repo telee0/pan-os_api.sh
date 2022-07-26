@@ -31,5 +31,5 @@ echo
 # check before use
 #
 
-echo $RM -r [0-9]*
+$RM -r job-[0-9]*
 
