@@ -54,8 +54,10 @@ fi
 # Check first if required programs exist in the environment.
 #
 
+macos_msg="(not tested and not recommended.. Please deploy a Linux VM with Docker or Multipass)"
+
 #progs="wget xml_grep xml_pp"
-progs="wget xml_grep"
+progs="wget xml_grep realpath"
 
 for p in $progs; do
 	if ! command -v $p &> /dev/null; then
@@ -63,14 +65,20 @@ for p in $progs; do
 		echo "$p: required but not found. Take the steps to install $p."
 		echo
 		case "$p" in
+			realpath)
+				echo "MacOS: $macos_msg"
+				;;
 			wget)
 				echo 'CentOS 7/8: $ sudo yum install wget'
+				# echo 'MacOS: $ brew install wget'
+				echo "MacOS: $macos_msg"
 				echo 'Ubuntu: $ sudo apt install wget'
 				echo
 				;;
 			xml_grep)
 				echo 'CentOS 7: $ sudo yum install perl-XML-Twig'
 				echo 'CentOS 8: $ sudo dnf --enablerepo=powertools install perl-XML-Twig'
+				echo "MacOS: $macos_msg"
 				echo 'Ubuntu: $ sudo apt install xml-twig-tools'
 				echo
 				;;
@@ -94,7 +102,7 @@ echo "SCRIPT_HOME = $SCRIPT_HOME"
 # set the data path and change to it
 #
 
-WORK_DIR="$$"
+WORK_DIR="job-$$"
 
 X="xml"
 L="logs"
