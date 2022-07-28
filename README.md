@@ -2,6 +2,8 @@
 
 Scripts to generate PAN XML config and apply it through REST API
 
+## I am going to port this script set to Python.
+
 Supported config as follows.
 
 * Device > Local users
